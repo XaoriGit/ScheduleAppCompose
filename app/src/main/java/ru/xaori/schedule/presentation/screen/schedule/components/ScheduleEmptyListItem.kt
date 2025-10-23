@@ -1,0 +1,38 @@
+package ru.xaori.schedule.presentation.screen.schedule.components
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+
+@Composable
+fun ScheduleEmptyListItem() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp, 12.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            "(>_<)",
+            style = MaterialTheme.typography.displayMedium,
+            color = MaterialTheme.colorScheme.secondary,
+        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                "На сегодня расписания нет",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.secondary,
+            )
+        }
+    }
+}
