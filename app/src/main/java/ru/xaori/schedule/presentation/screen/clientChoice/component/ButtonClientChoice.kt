@@ -15,7 +15,10 @@ fun ButtonClientChoice(title: String, onClick: (client: String) -> Unit) {
     TextButton(
         onClick = { onClick(title) },
         shape = RoundedCornerShape(12.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+
 
     ) {
         Text(
