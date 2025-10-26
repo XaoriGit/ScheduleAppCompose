@@ -23,7 +23,7 @@ fun ScheduleListItem(
 ) {
     Card(
         colors = CardDefaults.cardColors(
-            MaterialTheme.colorScheme.surfaceVariant
+            MaterialTheme.colorScheme.surfaceContainer
         ), shape = RoundedCornerShape(12.dp)
     ) {
         Column(
@@ -45,12 +45,12 @@ fun ScheduleListItem(
                     ) {
                         Text(
                             "${lesson.number} пара",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
                             lesson.time,
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -66,39 +66,26 @@ fun ScheduleListItem(
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
-                            Card(
-                                colors = CardDefaults.cardColors(
-                                    MaterialTheme.colorScheme.primary
-                                ),
-                                shape = RoundedCornerShape(8.dp)
-                            ) {
-                                Text(
-                                    type,
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                    modifier = Modifier.padding(10.dp, 6.dp)
+                            InfoChip(
+                                type,
+                                MaterialTheme.colorScheme.primary,
+                                MaterialTheme.colorScheme.onPrimary
+
+                            )
+                            if (location.isNotEmpty()) {
+                                InfoChip(
+                                    location,
+                                    MaterialTheme.colorScheme.secondary,
+                                    MaterialTheme.colorScheme.onSecondary
+
                                 )
                             }
-                            if (location.isNotEmpty()) {
-                                Card(
-                                    colors = CardDefaults.cardColors(
-                                        MaterialTheme.colorScheme.secondary
-                                    ),
-                                    shape = RoundedCornerShape(8.dp)
-                                ) {
-                                    Text(
-                                        location,
-                                        style = MaterialTheme.typography.labelMedium,
-                                        color = MaterialTheme.colorScheme.onSecondary,
-                                        modifier = Modifier.padding(10.dp, 6.dp)
-                                    )
-                                }
-                            }
                         }
-                        Text(
+                        InfoChip(
                             partner,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            MaterialTheme.colorScheme.tertiary,
+                            MaterialTheme.colorScheme.onTertiary
+
                         )
                     }
                 }

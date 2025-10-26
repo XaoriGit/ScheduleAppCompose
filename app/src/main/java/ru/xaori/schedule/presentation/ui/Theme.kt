@@ -1,6 +1,8 @@
 package ru.xaori.schedule.presentation.ui
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
@@ -81,14 +83,17 @@ private val darkScheme = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDark,
 )
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AppTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
+    motionScheme: MotionScheme = MotionScheme.expressive(),
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
         colorScheme = if (useDarkTheme) darkScheme else lightScheme,
         shapes = MaterialTheme.shapes,
+        motionScheme = motionScheme,
         content = content
     )
 }

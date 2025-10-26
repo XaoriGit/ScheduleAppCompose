@@ -1,5 +1,6 @@
 package ru.xaori.schedule.presentation.screen.clientChoice
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -44,12 +45,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import org.koin.compose.viewmodel.koinViewModel
 import ru.xaori.schedule.R
+import ru.xaori.schedule.core.ApiError
+import ru.xaori.schedule.core.UIState
 import ru.xaori.schedule.presentation.viewmodel.ClientChoiceViewModel
-import ru.xaori.schedule.presentation.state.ClientChoiceDataState
 import ru.xaori.schedule.domain.model.ClientTypeDestination
 import ru.xaori.schedule.presentation.screen.clientChoice.component.ButtonClientChoice
-import ru.xaori.schedule.presentation.state.AppBarStatus
 import ru.xaori.schedule.presentation.common.AnimatedAppBar
+import ru.xaori.schedule.presentation.state.AnimatedAppBarStatus.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,6 +62,8 @@ fun ClientChoiceScreen(
     viewModel: ClientChoiceViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val searchQuery by viewModel.searchQuery.collectAsState()
+    val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
     var isNavigate by remember { mutableStateOf(false) }
 
     val focusRequester = remember { FocusRequester() }
@@ -71,14 +75,24 @@ fun ClientChoiceScreen(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.padding(16.dp, 8.dp)
+        modifier = Modifier
+            .padding(0.dp, 8.dp)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         AnimatedAppBar(
-            "Расписание", when (val state = uiState.dataState) {
-                is ClientChoiceDataState.Loading -> AppBarStatus.Loading
-                is ClientChoiceDataState.Success -> AppBarStatus.SubTitle("Выбор расписания")
-                is ClientChoiceDataState.Error -> AppBarStatus.SubTitleError(state.detail)
-            }
+            "Расписание",
+            when (val state = uiState) {
+                is UIState.Loading -> Loading
+                is UIState.Success -> SubTitle(
+                    "Выбрать расписание"
+                )
+                is UIState.Error -> when (val errorState = state.error) {
+                    is ApiError.Network -> SubTitleError("Нет интернета")
+                    is ApiError.Server -> SubTitleError("Ошибка сервера")
+                    is ApiError.Timeout -> SubTitleError("Нестабильно соединение")
+                    is ApiError.Unknown -> SubTitleError("Неизвестная ошибка ${errorState.error.message}")
+                }
+            },
         ) {
             if (showCancelButton) {
                 IconButton(
@@ -100,29 +114,28 @@ fun ClientChoiceScreen(
             }
         }
         SecondaryTabRow(
-            selectedTabIndex = uiState.selectedTabIndex,
+            selectedTabIndex = selectedTabIndex,
             divider = {},
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
-            modifier = Modifier.clip(RoundedCornerShape(12.dp))
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(12.dp))
+
         ) {
             ClientTypeDestination.entries.forEachIndexed { index, type ->
-                Tab(
-                    selected = uiState.selectedTabIndex == index,
-                    onClick = {
-                        viewModel.onTabSelected(ClientTypeDestination.entries[index].ordinal)
-                    },
-                    text = {
-                        Text(
-                            type.title,
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-                )
+                Tab(selected = selectedTabIndex == index, onClick = {
+                    viewModel.onTabSelected(ClientTypeDestination.entries[index].ordinal)
+                }, text = {
+                    Text(
+                        type.title,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                })
             }
         }
         TextField(
-            value = uiState.searchQuery,
+            value = searchQuery,
             onValueChange = { value -> viewModel.onSearchQueryChange(value) },
             label = {
                 Text(
@@ -131,9 +144,15 @@ fun ClientChoiceScreen(
             },
             singleLine = true,
             shape = RoundedCornerShape(12.dp),
-            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Unspecified, autoCorrectEnabled = false, keyboardType = KeyboardType.Unspecified, imeAction = ImeAction.Unspecified),
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Unspecified,
+                autoCorrectEnabled = false,
+                keyboardType = KeyboardType.Unspecified,
+                imeAction = ImeAction.Unspecified
+            ),
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(horizontal = 16.dp)
                 .focusRequester(focusRequester),
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
@@ -142,9 +161,10 @@ fun ClientChoiceScreen(
                 unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                 unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 focusedLabelColor = MaterialTheme.colorScheme.primary
-            ))
-        when (val state = uiState.dataState) {
-            is ClientChoiceDataState.Loading -> {
+            )
+        )
+        when (val state = uiState) {
+            is UIState.Loading -> {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
@@ -158,28 +178,28 @@ fun ClientChoiceScreen(
                 }
             }
 
-            is ClientChoiceDataState.Success -> {
-                val query = uiState.searchQuery.trim()
+            is UIState.Success -> {
+                val query = searchQuery.trim()
                 LazyColumn {
                     if (query.isEmpty()) {
-                        if (uiState.selectedTabIndex == ClientTypeDestination.Group.ordinal) {
-                            itemsIndexed(state.clientChoice.groups) { _, group ->
-                                ButtonClientChoice(group) {
+                        if (selectedTabIndex == ClientTypeDestination.Group.ordinal) {
+                            itemsIndexed(state.data.groups) { _, group ->
+                                ButtonClientChoice(group, ) {
                                     viewModel.onClickClientChoice(it, goToMain)
                                 }
                             }
                         } else {
-                            itemsIndexed(state.clientChoice.teachers) { _, teacher ->
+                            itemsIndexed(state.data.groups) { _, teacher ->
                                 ButtonClientChoice(teacher) {
                                     viewModel.onClickClientChoice(it, goToMain)
                                 }
                             }
                         }
                     } else {
-                        val groups = state.clientChoice.groups.filter {
+                        val groups = state.data.groups.filter {
                             it.contains(query, ignoreCase = true)
                         }
-                        val teachers = state.clientChoice.teachers.filter {
+                        val teachers = state.data.teachers.filter {
                             it.contains(query, ignoreCase = true)
                         }
 
@@ -205,7 +225,7 @@ fun ClientChoiceScreen(
             }
 
 
-            is ClientChoiceDataState.Error -> {
+            is UIState.Error -> {
                 Button(
                     onClick = { viewModel.getClients() },
                     contentPadding = PaddingValues(16.dp, 12.dp),

@@ -9,29 +9,36 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ru.xaori.schedule.presentation.state.AppBarStatus
+import ru.xaori.schedule.core.ApiError
+import ru.xaori.schedule.core.UIState
+import ru.xaori.schedule.domain.model.ScheduleDataResponse
+import ru.xaori.schedule.presentation.state.AnimatedAppBarStatus
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AnimatedAppBar(
     title: String,
-    status: AppBarStatus,
+    status: AnimatedAppBarStatus,
     goToSettings: () -> Unit = {},
     leftContent: @Composable (RowScope.() -> Unit) = {}
 ) {
+    val currentStatus by rememberUpdatedState(newValue = status)
     val color by animateColorAsState(
-        when (status) {
-            is AppBarStatus.Loading -> MaterialTheme.colorScheme.outline
-            is AppBarStatus.SubTitle -> MaterialTheme.colorScheme.primary
-            is AppBarStatus.SubTitleError -> MaterialTheme.colorScheme.error
+        targetValue =  when (status) {
+            is AnimatedAppBarStatus.Loading -> MaterialTheme.colorScheme.outline
+            is AnimatedAppBarStatus.SubTitle -> MaterialTheme.colorScheme.primary
+            is AnimatedAppBarStatus.SubTitleError -> MaterialTheme.colorScheme.error
         },
-        tween(500)
+        animationSpec = tween(durationMillis = 500)
     )
 
     Row(
@@ -50,15 +57,14 @@ fun AnimatedAppBar(
             )
             AnimatedContent(targetState = status) { currentStatus ->
                 when (currentStatus) {
-                    is AppBarStatus.Loading -> {
+                    is AnimatedAppBarStatus.Loading -> {
                         Text(
                             "Загрузка...",
                             style = MaterialTheme.typography.labelLarge,
                             color = color
                         )
                     }
-
-                    is AppBarStatus.SubTitle -> {
+                    is AnimatedAppBarStatus.SubTitle -> {
                         Text(
                             currentStatus.subTitle,
                             style = MaterialTheme.typography.labelLarge,
@@ -68,8 +74,7 @@ fun AnimatedAppBar(
                             )
                         )
                     }
-
-                    is AppBarStatus.SubTitleError -> {
+                    is AnimatedAppBarStatus.SubTitleError -> {
                         Text(
                             currentStatus.subTitle,
                             style = MaterialTheme.typography.labelLarge,
