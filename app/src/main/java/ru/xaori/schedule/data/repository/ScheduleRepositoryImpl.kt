@@ -1,14 +1,16 @@
 package ru.xaori.schedule.data.repository
 
+import android.util.Log
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.plugins.ServerResponseException
-import kotlinx.io.IOException
 import ru.xaori.schedule.core.ApiError
 import ru.xaori.schedule.domain.model.ScheduleDataResponse
 import ru.xaori.schedule.data.api.ScheduleApi
 import ru.xaori.schedule.domain.repository.ClientChoiceRepository
 import ru.xaori.schedule.domain.repository.ScheduleRepository
+import java.io.IOException
+import java.nio.channels.UnresolvedAddressException
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
@@ -22,6 +24,8 @@ class ScheduleRepositoryImpl(
         return try {
             val response = scheduleApi.getSchedule(clientName, Clock.System.now())
             Result.success(response)
+        } catch (_: UnresolvedAddressException) {
+            Result.failure(ApiError.Network)
         } catch (_: IOException) {
             Result.failure(ApiError.Network)
         } catch (_: HttpRequestTimeoutException) {

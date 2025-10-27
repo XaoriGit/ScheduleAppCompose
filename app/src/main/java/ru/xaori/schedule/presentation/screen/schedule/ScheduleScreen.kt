@@ -46,11 +46,15 @@ import ru.xaori.schedule.presentation.screen.schedule.components.WeekDaysRow
 import ru.xaori.schedule.presentation.state.AnimatedAppBarStatus.Loading
 import ru.xaori.schedule.presentation.state.AnimatedAppBarStatus.SubTitle
 import ru.xaori.schedule.presentation.state.AnimatedAppBarStatus.SubTitleError
+import ru.xaori.schedule.presentation.state.SnackbarType
+import ru.xaori.schedule.presentation.viewmodel.SnackbarViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleScreen(
-    goToSettings: () -> Unit, viewModel: ScheduleViewModel = koinViewModel()
+    goToSettings: () -> Unit,
+    viewModel: ScheduleViewModel = koinViewModel(),
+    snackbarViewModel: SnackbarViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
@@ -71,6 +75,35 @@ fun ScheduleScreen(
         }
     }
 
+    LaunchedEffect(uiState) {
+        when (val state = uiState) {
+            is UIState.Error -> {
+                when (val error = state.error) {
+                    is ApiError.Network -> {
+                        snackbarViewModel.showSnackbar(
+                            message = "Нет интернета",
+                            type = SnackbarType.ERROR
+                        )
+                    }
+                    is ApiError.Timeout -> {
+                        snackbarViewModel.showSnackbar(
+                            message = "Время ожидания истекло",
+                            type = SnackbarType.ERROR
+                        )
+                    }
+                    is ApiError.Server -> {
+                        snackbarViewModel.showSnackbar(
+                            message = "Ошибка сервера: ${error.code}",
+                            type = SnackbarType.ERROR
+                        )
+                    }
+                    else -> {}
+                }
+            }
+            else -> {}
+        }
+    }
+
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.padding(0.dp, 8.dp),
@@ -85,7 +118,7 @@ fun ScheduleScreen(
                 is UIState.Error -> when (val errorState = state.error) {
                     is ApiError.Network -> SubTitleError("Нет интернета")
                     is ApiError.Server -> SubTitleError("Ошибка сервера")
-                    is ApiError.Timeout -> SubTitleError("Нестабильно соединение")
+                    is ApiError.Timeout -> SubTitleError("Нестабильное соединение")
                     is ApiError.Unknown -> SubTitleError("Неизвестная ошибка ${errorState.error.message}")
                 }
             }, goToSettings
