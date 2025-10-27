@@ -52,6 +52,7 @@ import ru.xaori.schedule.domain.model.ClientTypeDestination
 import ru.xaori.schedule.presentation.screen.clientChoice.component.ButtonClientChoice
 import ru.xaori.schedule.presentation.common.AnimatedAppBar
 import ru.xaori.schedule.presentation.state.AnimatedAppBarStatus.*
+import ru.xaori.schedule.presentation.viewmodel.SnackbarViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,7 +60,8 @@ fun ClientChoiceScreen(
     showCancelButton: Boolean,
     goToBack: () -> Unit,
     goToMain: () -> Unit,
-    viewModel: ClientChoiceViewModel = koinViewModel()
+    viewModel: ClientChoiceViewModel = koinViewModel(),
+    snackbarViewModel: SnackbarViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()

@@ -22,10 +22,6 @@ fun Navigation(viewModel: NavViewModel = koinViewModel()) {
     val newUser by viewModel.newUser.collectAsState()
     val startDestination = if (newUser) Screen.Start.route else Screen.Schedule.route
 
-    LaunchedEffect(newUser) {
-        Log.d("APP", newUser.toString())
-    }
-
     NavHost(
         navController = navController,
         startDestination = startDestination,

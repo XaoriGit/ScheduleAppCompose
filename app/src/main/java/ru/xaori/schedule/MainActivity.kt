@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import ru.xaori.schedule.presentation.common.snackbar.SnackbarHostContainer
 import ru.xaori.schedule.presentation.navigation.Navigation
 import ru.xaori.schedule.presentation.ui.AppTheme
 
@@ -26,18 +27,20 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+                SnackbarHostContainer {
                     Surface(
-                        modifier = Modifier.padding(
-                            WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
-                                .asPaddingValues()
-                        ),
-                        color = Color.Transparent
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
                     ) {
-                        Navigation()
+                        Surface(
+                            modifier = Modifier.padding(
+                                WindowInsets.safeDrawing.only(WindowInsetsSides.Top)
+                                    .asPaddingValues()
+                            ),
+                            color = Color.Transparent
+                        ) {
+                            Navigation()
+                        }
                     }
                 }
             }
