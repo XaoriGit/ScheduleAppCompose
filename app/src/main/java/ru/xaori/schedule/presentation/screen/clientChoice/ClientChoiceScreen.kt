@@ -88,10 +88,10 @@ fun ClientChoiceScreen(
                 is UIState.Success -> SubTitle(
                     "Выбрать расписание"
                 )
+
                 is UIState.Error -> when (val errorState = state.error) {
                     is ApiError.Network -> SubTitleError("Нет интернета")
                     is ApiError.Server -> SubTitleError("Ошибка сервера")
-                    is ApiError.Timeout -> SubTitleError("Нестабильно соединение")
                     is ApiError.Unknown -> SubTitleError("Неизвестная ошибка ${errorState.error.message}")
                 }
             },
@@ -186,7 +186,7 @@ fun ClientChoiceScreen(
                     if (query.isEmpty()) {
                         if (selectedTabIndex == ClientTypeDestination.Group.ordinal) {
                             itemsIndexed(state.data.groups) { _, group ->
-                                ButtonClientChoice(group, ) {
+                                ButtonClientChoice(group) {
                                     viewModel.onClickClientChoice(it, goToMain)
                                 }
                             }
@@ -232,7 +232,9 @@ fun ClientChoiceScreen(
                     onClick = { viewModel.getClients() },
                     contentPadding = PaddingValues(16.dp, 12.dp),
                     shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.secondary
                     )

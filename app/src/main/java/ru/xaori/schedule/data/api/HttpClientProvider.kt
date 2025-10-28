@@ -17,9 +17,9 @@ fun createHttpClient(): HttpClient {
         defaultRequest { url("https://app.omsktec.ru/api/") }
         expectSuccess = true
         install(HttpTimeout) {
-            requestTimeoutMillis = 15_000
-            connectTimeoutMillis = 10_000
-            socketTimeoutMillis = 15_000
+            requestTimeoutMillis = 8_000
+            connectTimeoutMillis = 5_000
+            socketTimeoutMillis = 8_000
         }
         install(ContentNegotiation) {
             json(Json {

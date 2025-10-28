@@ -38,6 +38,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import ru.xaori.schedule.R
 import ru.xaori.schedule.core.ApiError
 import ru.xaori.schedule.core.UIState
+import ru.xaori.schedule.domain.model.ScheduleUiData
 import ru.xaori.schedule.presentation.viewmodel.ScheduleViewModel
 import ru.xaori.schedule.presentation.common.AnimatedAppBar
 import ru.xaori.schedule.presentation.screen.schedule.components.ScheduleList
@@ -64,7 +65,7 @@ fun ScheduleScreen(
     val pagerState = rememberPagerState(
         initialPage = 0, pageCount = {
             val state = uiState
-            if (state is UIState.Success) state.data.schedules.size
+            if (state is UIState.Success) state.data.scheduleData.schedules.size
             else 0
         })
 
@@ -81,28 +82,32 @@ fun ScheduleScreen(
                 when (val error = state.error) {
                     is ApiError.Network -> {
                         snackbarViewModel.showSnackbar(
-                            message = "Нет интернета",
-                            type = SnackbarType.ERROR
+                            message = "Нет интернета", type = SnackbarType.ERROR
                         )
                     }
-                    is ApiError.Timeout -> {
-                        snackbarViewModel.showSnackbar(
-                            message = "Время ожидания истекло",
-                            type = SnackbarType.ERROR
-                        )
-                    }
+
                     is ApiError.Server -> {
                         snackbarViewModel.showSnackbar(
-                            message = "Ошибка сервера: ${error.code}",
-                            type = SnackbarType.ERROR
+                            message = "Ошибка сервера: ${error.code}", type = SnackbarType.ERROR
                         )
                     }
+
                     else -> {}
                 }
             }
+
             else -> {}
         }
     }
+
+    LaunchedEffect(uiState) {
+        if (uiState is UIState.Success && (uiState as UIState.Success<ScheduleUiData>).data.isCached) {
+            snackbarViewModel.showSnackbar(
+                message = "Расписание может быть не актуальным", type = SnackbarType.ERROR
+            )
+        }
+    }
+
 
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -112,13 +117,12 @@ fun ScheduleScreen(
             "Расписание", when (val state = uiState) {
                 is UIState.Loading -> Loading
                 is UIState.Success -> SubTitle(
-                    state.data.clientName
+                    state.data.scheduleData.clientName
                 )
 
                 is UIState.Error -> when (val errorState = state.error) {
                     is ApiError.Network -> SubTitleError("Нет интернета")
                     is ApiError.Server -> SubTitleError("Ошибка сервера")
-                    is ApiError.Timeout -> SubTitleError("Нестабильное соединение")
                     is ApiError.Unknown -> SubTitleError("Неизвестная ошибка ${errorState.error.message}")
                 }
             }, goToSettings
@@ -147,7 +151,9 @@ fun ScheduleScreen(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
-                        WeekDaysRow(pagerState.currentPage, state.data.schedules) { value ->
+                        WeekDaysRow(
+                            pagerState.currentPage, state.data.scheduleData.schedules
+                        ) { value ->
                             coroutineScope.launch {
                                 pagerState.animateScrollToPage(value, animationSpec = tween())
                             }
@@ -170,7 +176,9 @@ fun ScheduleScreen(
                             },
                         ) {
                             ScheduleList(
-                                state.data.schedules, state.data.lastUpdate, pagerState
+                                state.data.scheduleData.schedules,
+                                state.data.scheduleData.lastUpdate,
+                                pagerState
                             )
                         }
                     }
@@ -178,7 +186,9 @@ fun ScheduleScreen(
 
                 is UIState.Error -> {
                     Column(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(
                             20.dp, Alignment.CenterVertically
