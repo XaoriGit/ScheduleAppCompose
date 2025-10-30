@@ -17,7 +17,7 @@ fun ScheduleEmptyListItem() {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp, 12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
+        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -29,9 +29,14 @@ fun ScheduleEmptyListItem() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                "На сегодня расписания нет",
+                "Расписания пока нет",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.secondary,
+            )
+            Text(
+                "Попробуйте позже",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface,
             )
         }
     }
