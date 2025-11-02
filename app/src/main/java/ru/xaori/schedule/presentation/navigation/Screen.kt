@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class Screen(val route: String) {
-    object Start : Screen("start")
+    object Onboarding : Screen("onboarding")
     object Schedule : Screen("schedule")
 }
