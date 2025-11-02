@@ -1,4 +1,4 @@
-package ru.xaori.schedule.presentation.screen.clientChoice.component
+package ru.xaori.schedule.presentation.feature.clientChoice.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

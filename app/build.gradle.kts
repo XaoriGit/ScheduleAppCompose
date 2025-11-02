@@ -15,7 +15,7 @@ android {
         minSdk = 28
         targetSdk = 36
         versionCode = 3
-        versionName = "1.1.0-beta02"
+        versionName = "1.1.0-beta03"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -74,7 +74,4 @@ dependencies {
     implementation(libs.ktor.client.logging)
     // Datetime
     implementation(libs.kotlinx.datetime)
-    // Settings
-    implementation(libs.multiplatform.settings)
-    implementation(libs.multiplatform.settings.coroutines)
 }

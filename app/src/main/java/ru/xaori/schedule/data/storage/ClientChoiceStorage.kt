@@ -1,11 +1,26 @@
 package ru.xaori.schedule.data.storage
 
-import com.russhwolf.settings.ExperimentalSettingsApi
-import com.russhwolf.settings.coroutines.SuspendSettings
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import kotlinx.coroutines.flow.firstOrNull
 import ru.xaori.schedule.domain.model.ClientChoiceConstants
 
-@OptIn(ExperimentalSettingsApi::class)
-class ClientChoiceStorage(private val settings: SuspendSettings) {
-    suspend fun setClient(client: String) = settings.putString(ClientChoiceConstants.CLIENT, client)
-    suspend fun getClient(): String? = settings.getStringOrNull(ClientChoiceConstants.CLIENT)
+
+class ClientChoiceStorage(
+    private val dataStore: DataStore<Preferences>
+) {
+    private val clientKey = stringPreferencesKey(ClientChoiceConstants.CLIENT)
+
+    suspend fun setClient(client: String) {
+        dataStore.edit { prefs ->
+            prefs[clientKey] = client
+        }
+    }
+
+    suspend fun getClient(): String? {
+        val prefs = dataStore.data.firstOrNull() ?: return null
+        return prefs[clientKey]
+    }
 }

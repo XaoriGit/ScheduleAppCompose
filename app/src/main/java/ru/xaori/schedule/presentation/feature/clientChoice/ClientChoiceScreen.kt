@@ -1,4 +1,4 @@
-package ru.xaori.schedule.presentation.screen.clientChoice
+package ru.xaori.schedule.presentation.feature.clientChoice
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -49,7 +49,7 @@ import ru.xaori.schedule.core.ApiError
 import ru.xaori.schedule.core.UIState
 import ru.xaori.schedule.presentation.viewmodel.ClientChoiceViewModel
 import ru.xaori.schedule.domain.model.ClientTypeDestination
-import ru.xaori.schedule.presentation.screen.clientChoice.component.ButtonClientChoice
+import ru.xaori.schedule.presentation.feature.clientChoice.component.ButtonClientChoice
 import ru.xaori.schedule.presentation.common.AnimatedAppBar
 import ru.xaori.schedule.presentation.state.AnimatedAppBarStatus.*
 import ru.xaori.schedule.presentation.viewmodel.SnackbarViewModel

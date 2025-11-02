@@ -1,4 +1,4 @@
-package ru.xaori.schedule.presentation.screen.schedule.components
+package ru.xaori.schedule.presentation.feature.schedule.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable

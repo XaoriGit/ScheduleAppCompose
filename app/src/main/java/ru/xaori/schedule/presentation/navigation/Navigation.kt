@@ -1,19 +1,15 @@
 package ru.xaori.schedule.presentation.navigation
 
-import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import org.koin.androidx.compose.koinViewModel
-import ru.xaori.schedule.presentation.screen.clientChoice.ClientChoiceScreen
-import ru.xaori.schedule.presentation.screen.schedule.ScheduleScreen
-import ru.xaori.schedule.presentation.screen.start.StartScreen
+import ru.xaori.schedule.presentation.feature.schedule.ScheduleScreen
+import ru.xaori.schedule.presentation.feature.start.StartScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -27,28 +23,19 @@ fun Navigation(viewModel: NavViewModel = koinViewModel()) {
         startDestination = startDestination,
     ) {
         composable(Screen.Start.route) {
-            StartScreen {
-                navController.navigate(Screen.ClientChoice(false)) {
-                    popUpTo(Screen.Start.route) { inclusive = true }
+            StartScreen(
+                goToSchedule = {
+                    navController.navigate(Screen.Schedule.route)
                 }
-            }
+            )
         }
         composable(Screen.Schedule.route) {
             ScheduleScreen(
                 goToSettings = {
-                    navController.navigate(Screen.ClientChoice(true))
+                    // TODO: Экран настроек
+//                    navController.navigate(Screen.ClientChoice(true))
                 }
             )
-        }
-        composable<Screen.ClientChoice> { backStackEntry ->
-            val clientChoice: Screen.ClientChoice = backStackEntry.toRoute()
-            ClientChoiceScreen(clientChoice.showCancelButton, {
-                navController.popBackStack()
-            }, {
-                navController.navigate(Screen.Schedule.route) {
-                    popUpTo(Screen.ClientChoice(false)) { inclusive = true }
-                }
-            })
         }
     }
 }

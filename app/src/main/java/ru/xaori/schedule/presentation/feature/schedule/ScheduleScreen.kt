@@ -1,14 +1,17 @@
-package ru.xaori.schedule.presentation.screen.schedule
+package ru.xaori.schedule.presentation.feature.schedule
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -17,10 +20,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -31,6 +36,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
@@ -39,15 +45,16 @@ import ru.xaori.schedule.R
 import ru.xaori.schedule.core.ApiError
 import ru.xaori.schedule.core.UIState
 import ru.xaori.schedule.domain.model.ScheduleUiData
-import ru.xaori.schedule.presentation.viewmodel.ScheduleViewModel
 import ru.xaori.schedule.presentation.common.AnimatedAppBar
-import ru.xaori.schedule.presentation.screen.schedule.components.ScheduleList
-import ru.xaori.schedule.presentation.screen.schedule.components.ScheduleSkeleton
-import ru.xaori.schedule.presentation.screen.schedule.components.WeekDaysRow
+import ru.xaori.schedule.presentation.feature.clientChoice.ClientChoiceSheetContent
+import ru.xaori.schedule.presentation.feature.schedule.components.ScheduleList
+import ru.xaori.schedule.presentation.feature.schedule.components.ScheduleSkeleton
+import ru.xaori.schedule.presentation.feature.schedule.components.WeekDaysRow
 import ru.xaori.schedule.presentation.state.AnimatedAppBarStatus.Loading
 import ru.xaori.schedule.presentation.state.AnimatedAppBarStatus.SubTitle
 import ru.xaori.schedule.presentation.state.AnimatedAppBarStatus.SubTitleError
 import ru.xaori.schedule.presentation.state.SnackbarType
+import ru.xaori.schedule.presentation.viewmodel.ScheduleViewModel
 import ru.xaori.schedule.presentation.viewmodel.SnackbarViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,8 +66,14 @@ fun ScheduleScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
+
     var isRefreshing by remember { mutableStateOf(false) }
     val stateRefresh = rememberPullToRefreshState()
+
+    var showClientChoiceSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
 
     val pagerState = rememberPagerState(
         initialPage = 0, pageCount = {
@@ -68,7 +81,6 @@ fun ScheduleScreen(
             if (state is UIState.Success) state.data.scheduleData.schedules.size
             else 0
         })
-
 
     LaunchedEffect(uiState) {
         if (uiState !is UIState.Loading && isRefreshing) {
@@ -125,10 +137,11 @@ fun ScheduleScreen(
                     is ApiError.Server -> SubTitleError("Ошибка сервера")
                     is ApiError.Unknown -> SubTitleError("Неизвестная ошибка ${errorState.error.message}")
                 }
-            }, goToSettings
-        ) {
+            }, goToSettings = {
+                showClientChoiceSheet = true
+            }) {
             IconButton(
-                onClick = goToSettings,
+                onClick = { showClientChoiceSheet = true },
                 modifier = Modifier.size(28.dp),
             ) {
                 Icon(
@@ -235,9 +248,21 @@ fun ScheduleScreen(
                     }
                 }
             }
-
         }
-
-
     }
+
+    if (showClientChoiceSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showClientChoiceSheet = false },
+            sheetState = sheetState,
+        ) {
+            ClientChoiceSheetContent(
+                onClientChosen = {
+                    showClientChoiceSheet = false
+                    viewModel.getSchedule()
+                }
+            )
+        }
+    }
+
 }

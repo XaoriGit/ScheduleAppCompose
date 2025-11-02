@@ -1,4 +1,4 @@
-package ru.xaori.schedule.presentation.screen.schedule.components
+package ru.xaori.schedule.presentation.feature.schedule.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
