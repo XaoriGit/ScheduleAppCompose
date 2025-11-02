@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.koin.androidx.compose.koinViewModel
+import ru.xaori.schedule.presentation.feature.onboarding.OnboardingScreen
 import ru.xaori.schedule.presentation.feature.schedule.ScheduleScreen
 import ru.xaori.schedule.presentation.feature.start.StartScreen
 
@@ -16,17 +17,15 @@ import ru.xaori.schedule.presentation.feature.start.StartScreen
 fun Navigation(viewModel: NavViewModel = koinViewModel()) {
     val navController = rememberNavController()
     val newUser by viewModel.newUser.collectAsState()
-    val startDestination = if (newUser) Screen.Start.route else Screen.Schedule.route
+    val startDestination = if (newUser) Screen.Onboarding.route else Screen.Schedule.route
 
     NavHost(
         navController = navController,
         startDestination = startDestination,
     ) {
-        composable(Screen.Start.route) {
-            StartScreen(
-                goToSchedule = {
-                    navController.navigate(Screen.Schedule.route)
-                }
+        composable(Screen.Onboarding.route) {
+            OnboardingScreen(
+                onFinish = { navController.navigate(Screen.Schedule.route) }
             )
         }
         composable(Screen.Schedule.route) {
