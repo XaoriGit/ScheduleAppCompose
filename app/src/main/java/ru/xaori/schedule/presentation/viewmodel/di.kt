@@ -7,5 +7,6 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModelOf(::ScheduleViewModel)
     viewModelOf(::ClientChoiceViewModel)
+    viewModelOf(::OnboardingViewModel)
     singleOf(::SnackbarViewModel)
 }
