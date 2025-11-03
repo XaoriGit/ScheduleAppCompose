@@ -33,11 +33,11 @@ fun OnboardingScreen(
     AnimatedContent(uiState) {
         when (it.currentStep) {
             OnboardingStep.CLIENT_CHOICE -> ClientChoiceStep { showClientChoiceSheet = true }
-            OnboardingStep.NOTIFICATIONS -> NotificationsStep({ viewModel.enableNotifications() }, {
+            OnboardingStep.NOTIFICATIONS -> NotificationsStep({
                 viewModel.goToStep(
                     OnboardingStep.DONE
                 )
-            })
+            }, viewModel::onPermissionResult)
 
             OnboardingStep.DONE -> onFinish()
         }

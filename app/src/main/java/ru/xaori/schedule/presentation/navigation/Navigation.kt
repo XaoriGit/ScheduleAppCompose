@@ -10,7 +10,6 @@ import androidx.navigation.compose.rememberNavController
 import org.koin.androidx.compose.koinViewModel
 import ru.xaori.schedule.presentation.feature.onboarding.OnboardingScreen
 import ru.xaori.schedule.presentation.feature.schedule.ScheduleScreen
-import ru.xaori.schedule.presentation.feature.start.StartScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
