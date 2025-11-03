@@ -1,4 +1,4 @@
-package ru.xaori.schedule.data.storage
+package ru.xaori.schedule.data.store
 
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore

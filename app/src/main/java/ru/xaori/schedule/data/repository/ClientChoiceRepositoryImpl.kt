@@ -6,12 +6,12 @@ import kotlinx.io.IOException
 import ru.xaori.schedule.core.ApiError
 import ru.xaori.schedule.data.api.ClientChoiceApi
 import ru.xaori.schedule.domain.model.ClientChoiceResponse
-import ru.xaori.schedule.data.storage.ClientChoiceStorage
 import ru.xaori.schedule.domain.repository.ClientChoiceRepository
+import ru.xaori.schedule.domain.repository.SettingsRepository
 
 class ClientChoiceRepositoryImpl(
     private val clientChoiceApi: ClientChoiceApi,
-    private val clientChoiceStorage: ClientChoiceStorage
+    private val settingsRepository: SettingsRepository
 ): ClientChoiceRepository {
     override suspend fun getClients(): Result<ClientChoiceResponse> {
         return try {
@@ -29,14 +29,13 @@ class ClientChoiceRepositoryImpl(
     }
 
     override suspend fun getClient(): String {
-        return clientChoiceStorage.getClient() ?: "Клиент не найден"
+        return settingsRepository.getClient() ?: "Клиент не найден"
     }
 
-    override suspend fun setClient(value: String) = clientChoiceStorage.setClient(value)
+    override suspend fun setClient(value: String) = settingsRepository.setClient(value)
 
     override suspend fun isClient(): Boolean {
-        val clientString = clientChoiceStorage.getClient()
+        val clientString = settingsRepository.getClient()
         return !clientString.isNullOrEmpty()
     }
-
 }

@@ -1,5 +1,6 @@
 package ru.xaori.schedule.presentation.feature.schedule
 
+import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import ru.xaori.schedule.R
@@ -117,6 +119,17 @@ fun ScheduleScreen(
             snackbarViewModel.showSnackbar(
                 message = "Расписание может быть не актуальным", type = SnackbarType.ERROR
             )
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("FCM", "Fetching FCM registration token failed", task.exception)
+                return@addOnCompleteListener
+            }
+            val token = task.result
+            Log.d("FCM", "Token: $token")
         }
     }
 
