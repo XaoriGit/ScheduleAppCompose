@@ -10,6 +10,14 @@ class OnboardingViewModel : ViewModel() {
     private val _state = MutableStateFlow(OnboardingState())
     val state: StateFlow<OnboardingState> = _state
 
+    private val _isPermissionGranted = MutableStateFlow(false)
+    val isPermissionGranted: StateFlow<Boolean> = _isPermissionGranted
+
+    fun onPermissionResult(granted: Boolean) {
+        _isPermissionGranted.value = granted
+        enableNotifications()
+    }
+
     fun chooseClient() {
         _state.value = _state.value.copy(clientChosen = true, currentStep = OnboardingStep.NOTIFICATIONS)
     }

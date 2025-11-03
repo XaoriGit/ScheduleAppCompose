@@ -1,5 +1,9 @@
 package ru.xaori.schedule.presentation.feature.onboarding.component
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,7 +25,16 @@ import androidx.compose.ui.unit.dp
 import ru.xaori.schedule.R
 
 @Composable
-fun NotificationsStep(onEnable: () -> Unit, onSkip: () -> Unit) {
+fun NotificationsStep(
+    onSkip: () -> Unit,
+    onPermissionResult: (granted: Boolean) -> Unit
+) {
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(), onResult = { granted ->
+            onPermissionResult(granted)
+        })
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
@@ -52,7 +65,13 @@ fun NotificationsStep(onEnable: () -> Unit, onSkip: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Button(
-                onClick = onEnable,
+                onClick = {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    } else {
+                        onPermissionResult(true)
+                    }
+                },
                 contentPadding = PaddingValues(16.dp, 12.dp),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth()
