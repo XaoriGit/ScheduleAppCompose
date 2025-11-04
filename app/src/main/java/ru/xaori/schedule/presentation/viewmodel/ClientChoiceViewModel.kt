@@ -1,19 +1,14 @@
 package ru.xaori.schedule.presentation.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.koin.core.KoinApplication.Companion.init
 import ru.xaori.schedule.core.ApiError
 import ru.xaori.schedule.core.UIState
-import ru.xaori.schedule.domain.model.ClientChoiceResponse
-import ru.xaori.schedule.domain.model.ClientTypeDestination
+import ru.xaori.schedule.domain.model.clientChoice.ClientChoiceResponse
+import ru.xaori.schedule.domain.model.clientChoice.ClientTypeDestination
 import ru.xaori.schedule.domain.repository.ClientChoiceRepository
 
 class ClientChoiceViewModel(private val clientChoiceRepository: ClientChoiceRepository) :

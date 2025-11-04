@@ -1,9 +1,8 @@
-package ru.xaori.schedule.domain.model
+package ru.xaori.schedule.domain.model.schedule
 
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import ru.xaori.schedule.domain.model.WeekDays
 
 @Serializable
 data class ScheduleDataResponse(

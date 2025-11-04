@@ -1,4 +1,4 @@
-package ru.xaori.schedule.presentation.screen.schedule.components
+package ru.xaori.schedule.presentation.screen.schedule.component
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
@@ -23,7 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import ru.xaori.schedule.domain.model.ScheduleDay
+import ru.xaori.schedule.domain.model.schedule.ScheduleDay
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable

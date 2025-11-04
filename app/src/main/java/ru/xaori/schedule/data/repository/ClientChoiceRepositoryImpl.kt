@@ -5,7 +5,7 @@ import io.ktor.client.plugins.ServerResponseException
 import kotlinx.io.IOException
 import ru.xaori.schedule.core.ApiError
 import ru.xaori.schedule.data.api.ClientChoiceApi
-import ru.xaori.schedule.domain.model.ClientChoiceResponse
+import ru.xaori.schedule.domain.model.clientChoice.ClientChoiceResponse
 import ru.xaori.schedule.domain.repository.ClientChoiceRepository
 import ru.xaori.schedule.domain.repository.SettingsRepository
 

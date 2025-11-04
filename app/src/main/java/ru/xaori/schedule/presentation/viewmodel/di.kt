@@ -8,5 +8,7 @@ val viewModelModule = module {
     viewModelOf(::ScheduleViewModel)
     viewModelOf(::OnboardingViewModel)
     viewModelOf(::ClientChoiceViewModel)
+    viewModelOf(::SettingsViewModel)
     singleOf(::SnackbarViewModel)
+    singleOf(::ThemeViewModel)
 }

@@ -18,9 +18,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ru.xaori.schedule.core.ApiError
-import ru.xaori.schedule.core.UIState
-import ru.xaori.schedule.domain.model.ScheduleDataResponse
 import ru.xaori.schedule.presentation.state.AnimatedAppBarStatus
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

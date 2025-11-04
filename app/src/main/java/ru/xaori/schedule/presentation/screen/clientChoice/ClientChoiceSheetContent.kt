@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
 import ru.xaori.schedule.R
 import ru.xaori.schedule.core.UIState
-import ru.xaori.schedule.domain.model.ClientTypeDestination
+import ru.xaori.schedule.domain.model.clientChoice.ClientTypeDestination
 import ru.xaori.schedule.presentation.screen.clientChoice.component.ButtonClientChoice
 import ru.xaori.schedule.presentation.screen.clientChoice.component.ClientChoiceSkeleton
 import ru.xaori.schedule.presentation.viewmodel.ClientChoiceViewModel

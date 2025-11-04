@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import org.koin.androidx.compose.koinViewModel
 import ru.xaori.schedule.presentation.screen.onboarding.OnboardingScreen
 import ru.xaori.schedule.presentation.screen.schedule.ScheduleScreen
+import ru.xaori.schedule.presentation.screen.settings.SettingsScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -24,16 +25,16 @@ fun Navigation(viewModel: NavViewModel = koinViewModel()) {
     ) {
         composable(Screen.Onboarding.route) {
             OnboardingScreen(
-                onFinish = { navController.navigate(Screen.Schedule.route) }
-            )
+                onFinish = { navController.navigate(Screen.Schedule.route) })
         }
         composable(Screen.Schedule.route) {
             ScheduleScreen(
                 goToSettings = {
-                    // TODO: Экран настроек
-//                    navController.navigate(Screen.ClientChoice(true))
-                }
-            )
+                    navController.navigate(Screen.Settings.route)
+                })
+        }
+        composable(Screen.Settings.route) {
+            SettingsScreen(goToSchedule = { navController.navigate(Screen.Schedule.route) })
         }
     }
 }

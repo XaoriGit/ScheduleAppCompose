@@ -1,4 +1,4 @@
-package ru.xaori.schedule.domain.model
+package ru.xaori.schedule.domain.model.clientChoice
 
 enum class ClientTypeDestination(val title: String) {
     Group("Группа"),

@@ -6,7 +6,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import ru.xaori.schedule.domain.model.ScheduleDataResponse
+import ru.xaori.schedule.domain.model.schedule.ScheduleDataResponse
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
