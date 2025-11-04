@@ -1,4 +1,4 @@
-package ru.xaori.schedule.domain.model
+package ru.xaori.schedule.domain.model.schedule
 
 enum class WeekDays(
     val shortDay: String,

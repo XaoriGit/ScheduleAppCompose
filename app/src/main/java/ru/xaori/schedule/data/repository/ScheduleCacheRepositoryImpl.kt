@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.serialization.json.Json
-import ru.xaori.schedule.domain.model.ScheduleDataResponse
+import ru.xaori.schedule.domain.model.schedule.ScheduleDataResponse
 import ru.xaori.schedule.domain.repository.ScheduleCacheRepository
 
 class ScheduleCacheRepositoryImpl(

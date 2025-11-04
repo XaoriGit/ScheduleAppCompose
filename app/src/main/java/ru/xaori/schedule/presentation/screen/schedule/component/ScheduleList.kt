@@ -1,4 +1,4 @@
-package ru.xaori.schedule.presentation.screen.schedule.components
+package ru.xaori.schedule.presentation.screen.schedule.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ru.xaori.schedule.domain.model.ScheduleDay
+import ru.xaori.schedule.domain.model.schedule.ScheduleDay
 
 @Composable
 fun ScheduleList(

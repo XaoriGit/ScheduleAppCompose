@@ -1,27 +1,24 @@
 package ru.xaori.schedule.presentation.screen.schedule
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -40,12 +37,15 @@ import org.koin.compose.viewmodel.koinViewModel
 import ru.xaori.schedule.R
 import ru.xaori.schedule.core.ApiError
 import ru.xaori.schedule.core.UIState
-import ru.xaori.schedule.domain.model.ScheduleUiData
+import ru.xaori.schedule.domain.model.schedule.ScheduleUiData
 import ru.xaori.schedule.presentation.common.AnimatedAppBar
 import ru.xaori.schedule.presentation.screen.clientChoice.ClientChoiceBottomSheetHost
-import ru.xaori.schedule.presentation.screen.schedule.components.ScheduleList
-import ru.xaori.schedule.presentation.screen.schedule.components.ScheduleSkeleton
-import ru.xaori.schedule.presentation.screen.schedule.components.WeekDaysRow
+import ru.xaori.schedule.presentation.screen.clientChoice.ClientChoiceSheetContent
+import ru.xaori.schedule.presentation.screen.schedule.component.OfflineNotice
+import ru.xaori.schedule.presentation.screen.schedule.component.ScheduleErrorContent
+import ru.xaori.schedule.presentation.screen.schedule.component.ScheduleList
+import ru.xaori.schedule.presentation.screen.schedule.component.ScheduleSkeleton
+import ru.xaori.schedule.presentation.screen.schedule.component.WeekDaysRow
 import ru.xaori.schedule.presentation.state.AnimatedAppBarStatus.Loading
 import ru.xaori.schedule.presentation.state.AnimatedAppBarStatus.SubTitle
 import ru.xaori.schedule.presentation.state.AnimatedAppBarStatus.SubTitleError
@@ -53,6 +53,7 @@ import ru.xaori.schedule.presentation.state.SnackbarType
 import ru.xaori.schedule.presentation.viewmodel.ScheduleViewModel
 import ru.xaori.schedule.presentation.viewmodel.SnackbarViewModel
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleScreen(
@@ -65,6 +66,9 @@ fun ScheduleScreen(
 
     var isRefreshing by remember { mutableStateOf(false) }
     val stateRefresh = rememberPullToRefreshState()
+
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     val pagerState = rememberPagerState(
         initialPage = 0, pageCount = {
@@ -141,10 +145,9 @@ fun ScheduleScreen(
                         is ApiError.Server -> SubTitleError("Ошибка сервера")
                         is ApiError.Unknown -> SubTitleError("Неизвестная ошибка ${errorState.error.message}")
                     }
-                }, goToSettings = { onVisible(true) }
-            ) {
+                }, goToSettings = { onVisible(true) }) {
                 IconButton(
-                    onClick = { goToSettings },
+                    onClick = goToSettings,
                     modifier = Modifier.size(28.dp),
                 ) {
                     Icon(
@@ -174,6 +177,9 @@ fun ScheduleScreen(
                                     pagerState.animateScrollToPage(value, animationSpec = tween())
                                 }
                             }
+                            if (uiState is UIState.Success<ScheduleUiData> && (uiState as UIState.Success<ScheduleUiData>).data.isCached) {
+                                OfflineNotice()
+                            }
                             PullToRefreshBox(
                                 state = stateRefresh,
                                 isRefreshing = isRefreshing,
@@ -200,58 +206,33 @@ fun ScheduleScreen(
                         }
                     }
 
-                    is UIState.Error -> {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(
-                                20.dp, Alignment.CenterVertically
-                            )
-                        ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(
-                                    "Что-то пошло не так",
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    style = MaterialTheme.typography.titleMedium
-                                )
-                                Text(
-                                    "Проверьте интернет и попробуйте снова",
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
-                            }
-                            Button(
-                                onClick = { viewModel.getSchedule() },
-                                contentPadding = PaddingValues(16.dp, 12.dp),
-                                shape = RoundedCornerShape(12.dp),
-                                modifier = Modifier.fillMaxWidth(),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.secondary
-                                )
-                            ) {
-                                Icon(
-                                    painterResource(R.drawable.ic_refresh),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSecondary,
-                                    modifier = Modifier
-                                        .padding(end = 8.dp)
-                                        .size(20.dp),
-
-                                    )
-                                Text(
-                                    "Попробовать снова",
-                                    color = MaterialTheme.colorScheme.onSecondary,
-                                    style = MaterialTheme.typography.labelLarge
-                                )
-                            }
-                        }
+                    is UIState.Error -> ScheduleErrorContent {
+                        viewModel.getSchedule()
                     }
                 }
             }
+        }
+    }
+
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                coroutineScope.launch {
+                    sheetState.hide()
+                    showBottomSheet = false
+                }
+            },
+            sheetState = sheetState,
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+            tonalElevation = 3.dp
+        ) {
+            ClientChoiceSheetContent(
+                onClientChosen = {
+                    coroutineScope.launch {
+                        sheetState.hide()
+                        showBottomSheet = false
+                    }
+                })
         }
     }
 }

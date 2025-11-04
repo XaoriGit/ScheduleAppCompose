@@ -1,4 +1,4 @@
-package ru.xaori.schedule.domain.model
+package ru.xaori.schedule.domain.model.schedule
 
 data class ScheduleUiData(
     val scheduleData: ScheduleDataResponse,
