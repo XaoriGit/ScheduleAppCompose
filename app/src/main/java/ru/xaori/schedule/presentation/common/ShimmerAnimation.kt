@@ -25,7 +25,7 @@ fun ShimmerAnimation(modifier: Modifier = Modifier) {
     )
     val transition = rememberInfiniteTransition()
     val translateAnim = transition.animateFloat(
-        initialValue = 0f,
+        initialValue = -500f,
         targetValue = 1000f,
         animationSpec = infiniteRepeatable(
             animation = tween(durationMillis = 1000, easing = LinearEasing),

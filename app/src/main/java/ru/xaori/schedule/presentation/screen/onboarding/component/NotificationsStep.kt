@@ -1,4 +1,4 @@
-package ru.xaori.schedule.presentation.feature.onboarding.component
+package ru.xaori.schedule.presentation.screen.onboarding.component
 
 import android.Manifest
 import android.os.Build
@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,19 +27,20 @@ import ru.xaori.schedule.R
 
 @Composable
 fun NotificationsStep(
-    onSkip: () -> Unit,
-    onPermissionResult: (granted: Boolean) -> Unit
+    toNext: () -> Unit,
 ) {
 
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(), onResult = { granted ->
-            onPermissionResult(granted)
+        contract = ActivityResultContracts.RequestPermission(), onResult = { _ ->
+            toNext()
         })
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
-        modifier = Modifier.padding(16.dp, 8.dp)
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(16.dp, 8.dp)
     ) {
         Icon(
             painterResource(R.drawable.ic_notification),
@@ -55,7 +57,7 @@ fun NotificationsStep(
                 style = MaterialTheme.typography.titleMedium
             )
             Text(
-                "Приложение может запрашивать разрешение на отправку уведомлений",
+                "Мы можем уведомлять вас, когда обновится расписание. Разрешить уведомления?",
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center
@@ -69,7 +71,7 @@ fun NotificationsStep(
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
                     } else {
-                        onPermissionResult(true)
+                        toNext()
                     }
                 },
                 contentPadding = PaddingValues(16.dp, 12.dp),
@@ -83,7 +85,7 @@ fun NotificationsStep(
                 )
             }
             TextButton(
-                onClick = onSkip,
+                onClick = toNext,
                 contentPadding = PaddingValues(16.dp, 12.dp),
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth()
