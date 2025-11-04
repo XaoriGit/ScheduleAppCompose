@@ -8,8 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.koin.androidx.compose.koinViewModel
-import ru.xaori.schedule.presentation.feature.onboarding.OnboardingScreen
-import ru.xaori.schedule.presentation.feature.schedule.ScheduleScreen
+import ru.xaori.schedule.presentation.screen.onboarding.OnboardingScreen
+import ru.xaori.schedule.presentation.screen.schedule.ScheduleScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

@@ -1,6 +1,5 @@
 package ru.xaori.schedule.data
 
-import android.system.Os.bind
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module

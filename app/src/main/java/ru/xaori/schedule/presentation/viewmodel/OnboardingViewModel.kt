@@ -6,24 +6,12 @@ import kotlinx.coroutines.flow.StateFlow
 import ru.xaori.schedule.presentation.state.OnboardingState
 import ru.xaori.schedule.presentation.state.OnboardingStep
 
-class OnboardingViewModel : ViewModel() {
+class OnboardingViewModel: ViewModel() {
     private val _state = MutableStateFlow(OnboardingState())
     val state: StateFlow<OnboardingState> = _state
 
-    private val _isPermissionGranted = MutableStateFlow(false)
-    val isPermissionGranted: StateFlow<Boolean> = _isPermissionGranted
-
-    fun onPermissionResult(granted: Boolean) {
-        _isPermissionGranted.value = granted
-        enableNotifications()
-    }
-
     fun chooseClient() {
         _state.value = _state.value.copy(clientChosen = true, currentStep = OnboardingStep.NOTIFICATIONS)
-    }
-
-    fun enableNotifications() {
-        _state.value = _state.value.copy(notificationsEnabled = true, currentStep = OnboardingStep.DONE)
     }
 
     fun goToStep(step: OnboardingStep) {
