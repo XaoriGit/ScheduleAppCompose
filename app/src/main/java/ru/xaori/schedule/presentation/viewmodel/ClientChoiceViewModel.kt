@@ -1,10 +1,15 @@
 package ru.xaori.schedule.presentation.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.koin.core.KoinApplication.Companion.init
 import ru.xaori.schedule.core.ApiError
 import ru.xaori.schedule.core.UIState
 import ru.xaori.schedule.domain.model.ClientChoiceResponse
@@ -21,6 +26,9 @@ class ClientChoiceViewModel(private val clientChoiceRepository: ClientChoiceRepo
 
     private val _selectedTabIndex = MutableStateFlow<Int>(ClientTypeDestination.Group.ordinal)
     val selectedTabIndex: StateFlow<Int> = _selectedTabIndex
+
+    private val _showBottomSheet = MutableStateFlow(false)
+    val showBottomSheet: StateFlow<Boolean> = _showBottomSheet
 
     init {
         getClients()
@@ -55,5 +63,9 @@ class ClientChoiceViewModel(private val clientChoiceRepository: ClientChoiceRepo
             clientChoiceRepository.setClient(value)
             onComplete()
         }
+    }
+
+    fun onShowBottomSheet(value: Boolean) {
+        _showBottomSheet.value = value
     }
 }

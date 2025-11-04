@@ -1,8 +1,9 @@
-package ru.xaori.schedule.presentation.feature.onboarding.component
+package ru.xaori.schedule.presentation.screen.onboarding.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,11 +20,13 @@ import androidx.compose.ui.unit.dp
 import ru.xaori.schedule.R
 
 @Composable
-fun ClientChoiceStep(onClientChosen: () -> Unit) {
+fun ClientChoiceStep(onClick: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
-        modifier = Modifier.padding(16.dp, 8.dp)
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(16.dp, 8.dp)
     ) {
         Icon(
             painterResource(R.drawable.ic_education),
@@ -46,7 +49,7 @@ fun ClientChoiceStep(onClientChosen: () -> Unit) {
             )
         }
         Button(
-            onClick = onClientChosen,
+            onClick = onClick,
             contentPadding = PaddingValues(16.dp, 12.dp),
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier.fillMaxWidth()
