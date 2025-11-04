@@ -1,4 +1,4 @@
-package ru.xaori.schedule.domain.model
+package ru.xaori.schedule.domain.model.clientChoice
 
 import kotlinx.serialization.Serializable
 

@@ -7,7 +7,7 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.utils.io.InternalAPI
-import ru.xaori.schedule.domain.model.TokenRequest
+import ru.xaori.schedule.domain.model.notification.TokenRequest
 import kotlin.time.ExperimentalTime
 
 class NotificationApi(private val client: HttpClient) {

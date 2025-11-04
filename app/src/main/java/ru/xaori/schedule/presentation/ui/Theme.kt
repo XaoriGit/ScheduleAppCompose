@@ -6,6 +6,11 @@ import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import org.koin.androidx.compose.koinViewModel
+import ru.xaori.schedule.domain.model.settings.AppThemeMode
+import ru.xaori.schedule.presentation.viewmodel.ThemeViewModel
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -43,6 +48,8 @@ private val lightScheme = lightColorScheme(
     surfaceContainer = surfaceContainerLight,
     surfaceContainerHigh = surfaceContainerHighLight,
     surfaceContainerHighest = surfaceContainerHighestLight,
+    primaryFixed = primaryFixed,
+    onPrimaryFixedVariant = onPrimaryFixedVariant
 )
 
 private val darkScheme = darkColorScheme(
@@ -81,15 +88,24 @@ private val darkScheme = darkColorScheme(
     surfaceContainer = surfaceContainerDark,
     surfaceContainerHigh = surfaceContainerHighDark,
     surfaceContainerHighest = surfaceContainerHighestDark,
+    primaryFixed = primaryFixed,
+    onPrimaryFixedVariant = onPrimaryFixedVariant
 )
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AppTheme(
-    useDarkTheme: Boolean = isSystemInDarkTheme(),
     motionScheme: MotionScheme = MotionScheme.expressive(),
+    viewModel: ThemeViewModel = koinViewModel(),
     content: @Composable () -> Unit
 ) {
+    val themeMode by viewModel.theme.collectAsState()
+    val useDarkTheme = when (themeMode) {
+        AppThemeMode.DARK -> true
+        AppThemeMode.LIGHT -> false
+        AppThemeMode.SYSTEM -> isSystemInDarkTheme()
+    }
+
     MaterialTheme(
         colorScheme = if (useDarkTheme) darkScheme else lightScheme,
         shapes = MaterialTheme.shapes,

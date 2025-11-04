@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ru.xaori.schedule.core.ApiError
 import ru.xaori.schedule.core.UIState
-import ru.xaori.schedule.domain.model.ScheduleUiData
+import ru.xaori.schedule.domain.model.schedule.ScheduleUiData
 import ru.xaori.schedule.domain.repository.ScheduleRepository
 
 class ScheduleViewModel(

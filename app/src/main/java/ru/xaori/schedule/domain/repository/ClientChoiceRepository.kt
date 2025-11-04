@@ -1,6 +1,6 @@
 package ru.xaori.schedule.domain.repository
 
-import ru.xaori.schedule.domain.model.ClientChoiceResponse
+import ru.xaori.schedule.domain.model.clientChoice.ClientChoiceResponse
 
 interface ClientChoiceRepository {
     suspend fun getClients(): Result<ClientChoiceResponse>

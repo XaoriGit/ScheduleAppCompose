@@ -3,9 +3,8 @@ package ru.xaori.schedule.data.repository
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
 import ru.xaori.schedule.core.ApiError
-import ru.xaori.schedule.domain.model.ScheduleDataResponse
 import ru.xaori.schedule.data.api.ScheduleApi
-import ru.xaori.schedule.domain.model.ScheduleResult
+import ru.xaori.schedule.domain.model.schedule.ScheduleResult
 import ru.xaori.schedule.domain.repository.ClientChoiceRepository
 import ru.xaori.schedule.domain.repository.ScheduleCacheRepository
 import ru.xaori.schedule.domain.repository.ScheduleRepository

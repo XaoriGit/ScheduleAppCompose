@@ -5,7 +5,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import ru.xaori.schedule.domain.model.ClientChoiceResponse
+import ru.xaori.schedule.domain.model.clientChoice.ClientChoiceResponse
 
 class ClientChoiceApi(private val client: HttpClient) {
     suspend fun getClients(): ClientChoiceResponse {

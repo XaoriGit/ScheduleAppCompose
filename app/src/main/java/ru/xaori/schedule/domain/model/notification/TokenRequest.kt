@@ -1,4 +1,4 @@
-package ru.xaori.schedule.domain.model
+package ru.xaori.schedule.domain.model.notification
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
