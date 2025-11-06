@@ -6,6 +6,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -224,7 +225,7 @@ fun ScheduleScreen(
             },
             sheetState = sheetState,
             containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-            tonalElevation = 3.dp
+            tonalElevation = 3.dp,
         ) {
             ClientChoiceSheetContent(
                 onClientChosen = {
