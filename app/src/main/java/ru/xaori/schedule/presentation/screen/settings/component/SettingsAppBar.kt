@@ -10,6 +10,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -20,6 +21,7 @@ import ru.xaori.schedule.R
 fun SettingsAppBar(onClockToBack: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         Icon(
@@ -27,11 +29,11 @@ fun SettingsAppBar(onClockToBack: () -> Unit) {
             contentDescription = "back",
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
-                .size(28.dp)
+                .size(28.dp).clip(CircleShape)
                 .clickable {
                     onClockToBack()
                 }
-                .clip(CircleShape))
+                )
         Text(
             "Настройки",
             style = MaterialTheme.typography.titleLarge,

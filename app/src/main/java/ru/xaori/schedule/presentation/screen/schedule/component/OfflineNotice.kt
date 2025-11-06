@@ -28,7 +28,7 @@ fun OfflineNotice() {
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(12.dp))
             .background(MaterialTheme.colorScheme.primaryFixed)
-            .padding(16.dp, 8.dp)
+            .padding(8.dp, 12.dp, 16.dp, 12.dp)
     ) {
         Icon(
             painterResource(R.drawable.ic_lightbulb_star),
