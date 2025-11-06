@@ -1,4 +1,5 @@
 [versions]
+accompanistNavigationAnimation = "0.36.0"
 agp = "8.12.3"
 datastorePreferences = "1.1.7"
 firebaseBom = "34.5.0"
@@ -19,6 +20,7 @@ googleGmsGoogleServices = "4.4.4"
 firebaseMessaging = "25.0.1"
 
 [libraries]
+accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }

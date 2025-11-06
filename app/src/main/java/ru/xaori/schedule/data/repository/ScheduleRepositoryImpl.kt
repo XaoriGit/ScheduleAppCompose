@@ -25,21 +25,12 @@ class ScheduleRepositoryImpl(
             val response = scheduleApi.getSchedule(clientName, Clock.System.now())
             cacheRepository.saveSchedule(response)
             Result.success(ScheduleResult(response, false))
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             val cached = cacheRepository.getCachedSchedule()
-            when (e) {
-                is UnresolvedAddressException,
-                is IOException -> {
-                    if (cached != null)
-                        Result.success(ScheduleResult(cached, true))
-                    else
-                        Result.failure(ApiError.Network)
-                }
-
-                is ClientRequestException -> Result.failure(ApiError.Server(e.response.status.value, e.message))
-                is ServerResponseException -> Result.failure(ApiError.Server(e.response.status.value, e.message))
-                else -> Result.failure(ApiError.Unknown(e))
-            }
+            if (cached != null)
+                Result.success(ScheduleResult(cached, true))
+            else
+                Result.failure(ApiError.Network)
         }
     }
 }
