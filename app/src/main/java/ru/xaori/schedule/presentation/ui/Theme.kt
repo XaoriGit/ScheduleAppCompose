@@ -92,6 +92,45 @@ private val darkScheme = darkColorScheme(
     onPrimaryFixedVariant = onPrimaryFixedVariant
 )
 
+private val amoledScheme = darkColorScheme(
+    primary = primaryDark,
+    onPrimary = onPrimaryDark,
+    primaryContainer = primaryContainerDark,
+    onPrimaryContainer = onPrimaryContainerDark,
+    secondary = secondaryDark,
+    onSecondary = onSecondaryDark,
+    secondaryContainer = secondaryContainerDark,
+    onSecondaryContainer = onSecondaryContainerDark,
+    tertiary = tertiaryDark,
+    onTertiary = onTertiaryDark,
+    tertiaryContainer = tertiaryContainerDark,
+    onTertiaryContainer = onTertiaryContainerDark,
+    error = errorDark,
+    onError = onErrorDark,
+    errorContainer = errorContainerDark,
+    onErrorContainer = onErrorContainerDark,
+    background = backgroundAmoled,
+    onBackground = onBackgroundDark,
+    surface = surfaceAmoled,
+    onSurface = onSurfaceDark,
+    surfaceVariant = surfaceVariantDark,
+    onSurfaceVariant = onSurfaceVariantDark,
+    outline = outlineDark,
+    outlineVariant = outlineVariantDark,
+    scrim = scrimDark,
+    inverseSurface = inverseSurfaceDark,
+    inverseOnSurface = inverseOnSurfaceDark,
+    inversePrimary = inversePrimaryDark,
+    surfaceDim = surfaceDimDark,
+    surfaceBright = surfaceBrightDark,
+    surfaceContainerLowest = surfaceContainerLowestDark,
+    surfaceContainerLow = surfaceContainerLowDark,
+    surfaceContainer = surfaceContainerAmoled,
+    surfaceContainerHigh = surfaceContainerHighDark,
+    surfaceContainerHighest = surfaceContainerHighestDark,
+    primaryFixed = primaryFixed,
+    onPrimaryFixedVariant = onPrimaryFixedVariant,
+)
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AppTheme(
@@ -100,16 +139,19 @@ fun AppTheme(
     content: @Composable () -> Unit
 ) {
     val themeMode by viewModel.theme.collectAsState()
-    val useDarkTheme = when (themeMode) {
-        AppThemeMode.DARK -> true
-        AppThemeMode.LIGHT -> false
-        AppThemeMode.SYSTEM -> isSystemInDarkTheme()
+    val isSystemDark = isSystemInDarkTheme()
+
+    val colorScheme = when (themeMode) {
+        AppThemeMode.LIGHT -> lightScheme
+        AppThemeMode.DARK -> darkScheme
+        AppThemeMode.AMOLED -> amoledScheme
+        AppThemeMode.SYSTEM -> if (isSystemDark) darkScheme else lightScheme
     }
 
     MaterialTheme(
-        colorScheme = if (useDarkTheme) darkScheme else lightScheme,
+        colorScheme = colorScheme,
         shapes = MaterialTheme.shapes,
         motionScheme = motionScheme,
-        content = content
+        content = content,
     )
 }
