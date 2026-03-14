@@ -81,6 +81,10 @@ val primaryFixed = Color(0xFFD6E3FF)
 val onPrimaryFixedVariant = Color(0xFF264777)
 
 
+// AMOLED — чистый чёрный фон, всё остальное от тёмной темы
+val backgroundAmoled = Color(0xFF000000)
+val surfaceAmoled = Color(0xFF000000)
+val surfaceContainerAmoled = Color(0xFF111318)
 
 
 

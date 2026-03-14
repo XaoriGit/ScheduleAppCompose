@@ -3,7 +3,6 @@ package ru.xaori.schedule
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.Context
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -22,13 +21,13 @@ class App : Application() {
 
     private fun createNotificationChannel() {
         val channelId = "default_channel"
-        val channelName = "Default"
+        val channelName = "Обновление расписания"
         val channel = NotificationChannel(
             channelId,
             channelName,
-            NotificationManager.IMPORTANCE_HIGH
+            NotificationManager.IMPORTANCE_DEFAULT
         ).apply {
-            description = "Default notifications channel"
+            description = "Уведомлять когда появится новое расписание"
         }
 
         val notificationManager =
