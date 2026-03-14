@@ -226,6 +226,7 @@ fun ScheduleScreen(
             sheetState = sheetState,
             containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
             tonalElevation = 3.dp,
+
         ) {
             ClientChoiceSheetContent(
                 onClientChosen = {
