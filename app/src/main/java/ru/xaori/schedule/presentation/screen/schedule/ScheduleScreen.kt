@@ -6,7 +6,6 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -30,6 +29,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.firebase.messaging.FirebaseMessaging
@@ -64,6 +65,7 @@ fun ScheduleScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
+    val haptic = LocalHapticFeedback.current
 
     var isRefreshing by remember { mutableStateOf(false) }
     val stateRefresh = rememberPullToRefreshState()
@@ -80,6 +82,7 @@ fun ScheduleScreen(
 
     LaunchedEffect(uiState) {
         if (uiState !is UIState.Loading && isRefreshing) {
+            haptic.performHapticFeedback(HapticFeedbackType.Confirm)
             isRefreshing = false
         }
     }
@@ -186,6 +189,7 @@ fun ScheduleScreen(
                                 isRefreshing = isRefreshing,
                                 onRefresh = {
                                     isRefreshing = true
+                                    haptic.performHapticFeedback(HapticFeedbackType.ToggleOn)
                                     viewModel.getSchedule()
                                 },
                                 indicator = {

@@ -16,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import ru.xaori.schedule.domain.model.settings.AppThemeMode
 
@@ -26,7 +28,10 @@ fun ThemePickerDialog(
     onThemeSelected: (AppThemeMode) -> Unit,
     onDismiss: () -> Unit
 ) {
+    val haptic = LocalHapticFeedback.current
+
     AlertDialog(
+        containerColor = MaterialTheme.colorScheme.surface,
         onDismissRequest = onDismiss,
         confirmButton = {},
         text = {
@@ -54,6 +59,7 @@ fun ThemePickerDialog(
                                 onClick = {
                                     onThemeSelected(item)
                                     onDismiss()
+                                    haptic.performHapticFeedback(HapticFeedbackType.ToggleOn)
                                 }
                             )
                             Text(

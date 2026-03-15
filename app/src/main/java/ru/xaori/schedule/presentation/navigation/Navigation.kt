@@ -16,15 +16,16 @@ import ru.xaori.schedule.presentation.screen.onboarding.OnboardingScreen
 import ru.xaori.schedule.presentation.screen.schedule.ScheduleScreen
 import ru.xaori.schedule.presentation.screen.settings.SettingsScreen
 
-val slide = fadeIn() + slideInHorizontally { it } to
-        fadeOut() + slideOutHorizontally { -it / 2 }
-
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Navigation(viewModel: NavViewModel = koinViewModel()) {
     val navController = rememberNavController()
     val newUser by viewModel.newUser.collectAsState()
-    val startDestination = if (newUser) Screen.Onboarding.route else Screen.Schedule.route
+    val startDestination = when (newUser) {
+        null -> return
+        true -> Screen.Onboarding.route
+        false -> Screen.Schedule.route
+    }
 
     NavHost(
         navController = navController,
