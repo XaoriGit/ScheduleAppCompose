@@ -15,7 +15,6 @@ class SettingsStore(
     private val fcmTokenKey = stringPreferencesKey("fcm_token")
     private val appThemeKey = stringPreferencesKey("app_theme")
 
-
     suspend fun setClient(client: String) = dataStore.edit { it[clientKey] = client }
     suspend fun getClient(): String? = dataStore.data.firstOrNull()?.get(clientKey)
 

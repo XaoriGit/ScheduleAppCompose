@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ru.xaori.schedule.domain.usecase.IsClientUseCase
 
-class NavViewModel(private val isClientUseCase: IsClientUseCase): ViewModel() {
-    private val _newUser = MutableStateFlow(false)
-    val newUser: StateFlow<Boolean> = _newUser
+class NavViewModel(private val isClientUseCase: IsClientUseCase) : ViewModel() {
+    private val _newUser = MutableStateFlow<Boolean?>(null)
+    val newUser: StateFlow<Boolean?> = _newUser
 
     init {
         viewModelScope.launch {
