@@ -1,5 +1,8 @@
 package ru.xaori.schedule.presentation.viewmodel
 
+import android.content.Context
+import android.content.Intent
+import android.provider.Settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +31,13 @@ class SettingsViewModel(
 
     fun setTheme(mode: AppThemeMode) {
         themeViewModel.setTheme(mode)
+    }
+
+    fun openNotificationSettings(context: Context) {
+        val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+        }
+        context.startActivity(intent)
     }
 
     fun clearStore(onComplete: () -> Unit) {

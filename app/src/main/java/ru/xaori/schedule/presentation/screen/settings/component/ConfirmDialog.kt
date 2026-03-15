@@ -15,7 +15,10 @@ import androidx.compose.ui.unit.dp
 fun ConfirmDialog(
     title: String, description: String, onConfirm: () -> Unit, onDismiss: () -> Unit
 ) {
-    AlertDialog(onDismissRequest = onDismiss, text = {
+    AlertDialog(
+        containerColor = MaterialTheme.colorScheme.surface,
+        onDismissRequest = onDismiss,
+        text = {
         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Text(
                 title,
