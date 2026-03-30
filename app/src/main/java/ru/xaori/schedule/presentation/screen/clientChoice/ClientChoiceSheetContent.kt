@@ -56,13 +56,6 @@ fun ClientChoiceSheetContent(
         modifier = Modifier
             .fillMaxHeight(0.8f)
     ) {
-        Text(
-            "Выбрать расписание",
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-            textAlign = TextAlign.Start
-        )
         SecondaryTabRow(
             selectedTabIndex = selectedTabIndex,
             divider = {},
