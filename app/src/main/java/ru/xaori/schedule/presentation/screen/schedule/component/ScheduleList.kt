@@ -19,6 +19,7 @@ fun ScheduleList(
     schedule: List<ScheduleDay>,
     lastUpdate: String,
     pageState: PagerState,
+    setClient: (clientName: String) -> Unit
 ) {
     HorizontalPager(
         state = pageState,
@@ -35,7 +36,7 @@ fun ScheduleList(
                 modifier = Modifier.fillMaxHeight()
             ) {
                 items(schedule[page].lessons) { lesson ->
-                    ScheduleListItem(lesson)
+                    ScheduleListItem(lesson, setClient)
                 }
                 item {
                     LastUpdatedDate(lastUpdate)

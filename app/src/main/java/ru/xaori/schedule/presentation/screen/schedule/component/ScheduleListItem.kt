@@ -19,7 +19,8 @@ import ru.xaori.schedule.domain.model.schedule.Lesson
 
 @Composable
 fun ScheduleListItem(
-    lesson: Lesson
+    lesson: Lesson,
+    onClickPartner: (clientName: String) -> Unit
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -77,15 +78,14 @@ fun ScheduleListItem(
                                     location,
                                     MaterialTheme.colorScheme.secondary,
                                     MaterialTheme.colorScheme.onSecondary
-
                                 )
                             }
                         }
                         InfoChip(
                             partner,
                             MaterialTheme.colorScheme.tertiary,
-                            MaterialTheme.colorScheme.onTertiary
-
+                            MaterialTheme.colorScheme.onTertiary,
+                            onClickPartner
                         )
                     }
                 }

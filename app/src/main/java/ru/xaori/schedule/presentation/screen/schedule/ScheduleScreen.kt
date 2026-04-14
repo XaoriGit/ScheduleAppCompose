@@ -205,7 +205,8 @@ fun ScheduleScreen(
                                 ScheduleList(
                                     state.data.scheduleData.schedules,
                                     state.data.scheduleData.lastUpdate,
-                                    pagerState
+                                    pagerState,
+                                    viewModel::setClient
                                 )
                             }
                         }

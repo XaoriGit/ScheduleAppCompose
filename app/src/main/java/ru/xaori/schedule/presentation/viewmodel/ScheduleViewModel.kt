@@ -8,10 +8,12 @@ import kotlinx.coroutines.launch
 import ru.xaori.schedule.core.ApiError
 import ru.xaori.schedule.core.UIState
 import ru.xaori.schedule.domain.model.schedule.ScheduleUiData
+import ru.xaori.schedule.domain.repository.ClientChoiceRepository
 import ru.xaori.schedule.domain.repository.ScheduleRepository
 
 class ScheduleViewModel(
     private val scheduleRepository: ScheduleRepository,
+    private val clientChoiceRepository: ClientChoiceRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<UIState<ScheduleUiData>>(UIState.Loading)
     val uiState: StateFlow<UIState<ScheduleUiData>> = _uiState
@@ -33,6 +35,14 @@ class ScheduleViewModel(
                 val apiError = throwable as? ApiError ?: ApiError.Unknown(throwable)
                 _uiState.value = UIState.Error(apiError)
             })
+        }
+    }
+
+    fun setClient(clientName: String) {
+        _uiState.value = UIState.Loading
+        viewModelScope.launch {
+            clientChoiceRepository.setClient(clientName)
+            getSchedule()
         }
     }
 }
